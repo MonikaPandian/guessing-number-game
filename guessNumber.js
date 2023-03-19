@@ -1,17 +1,22 @@
 var numberOfGuesses;
 let timer = true;
+var maxScore = [];
+var noOfGuesses = [];
+let person = "";
+
 function startGame() {
     numberOfGuesses = 0;
     timer = true;
-    //stopTimer();
+
+    document.getElementById('guessField').value = "";
+
     document.getElementById('hr').innerHTML = "00";
     document.getElementById('min').innerHTML = "00";
     document.getElementById('sec').innerHTML = "00";
     document.getElementById('count').innerHTML = "00";
     stopWatch();
-    let person = prompt("Please enter your name", "John");
-
-    if (person != null) {
+    if (document.getElementById("name").innerHTML == "") {
+        person = prompt("Please enter your name", "John");
         document.getElementById("name").innerText = person;
     }
 
@@ -54,6 +59,7 @@ function submitGuess() {
     var userGuess = document.getElementById("guessField").value;
     var randomNumber = document.getElementById("sysGenerated").value;
 
+
     var rannum = randomNumber.toString().split("");
     var guess = userGuess.toString().split("");
 
@@ -89,6 +95,8 @@ function submitGuess() {
         + "\n * means digit does not exists");
 
     document.getElementById("No_of_guess").innerHTML = numberOfGuesses;
+    noOfGuesses.push(numberOfGuesses);
+    localStorage.setItem("numberofGuesses", noOfGuesses);
     checkGameOver();
 }
 
@@ -102,8 +110,25 @@ function checkGameOver() {
             + document.getElementById('min').innerHTML + "min "
             + document.getElementById('sec').innerHTML + "sec "
             + document.getElementById('count').innerHTML + "ms");
+        var timeTaken = document.getElementById('hr').innerHTML + ":" + document.getElementById('min').innerHTML + ":" +
+            document.getElementById('sec').innerHTML + ":" + document.getElementById('count').innerHTML;
+        maxScore.push(timeTaken);
+        localStorage.setItem('timings', maxScore);
+
+        let min = (arr) => {
+            let min = arr[0];
+
+            for (let i of arr) {
+                if (i < min) {
+                    min = i;
+                }
+            }
+            return min;
+        };
+
+        let minTiming = min(maxScore);
+        alert("New Top Score : " + minTiming + "  numberOfGuesses " + numberOfGuesses);
         stopTimer();
-        topScore();
         document.getElementById("No_of_guess").innerHTML = 0;
     }
 }
@@ -174,24 +199,6 @@ function stopWatch() {
     }
 }
 
-function topScore() {
-    var timeTaken = document.getElementById('hr').innerHTML + ":" + document.getElementById('min').innerHTML + ":" +
-        document.getElementById('sec').innerHTML + ":" + document.getElementById('count').innerHTML;
-    if (localStorage.getItem("topScore") != null) {
-        var topScoreNumberofGuesses = localStorage.getItem("numberofGuesses");
-        var oldTime = localStorage.getItem("topScore");
-        if (timeTaken == oldTime) {
-            if (topScoreNumberofGuesses > numberOfGuesses) {
-                alert("New Top Score : " + timeTaken + "  numberOfGuesses " + numberOfGuesses);
-                localStorage.setItem("topScore") = timeTaken;
-                localStorage.setItem("numberofGuesses") = numberOfGuesses;
-            }
-        }
-    } else {
-        localStorage.setItem("topScore", timeTaken);
-        localStorage.setItem("numberofGuesses", numberOfGuesses);
-    }
 
 
 
-}
