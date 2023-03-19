@@ -34,7 +34,6 @@ function generateRandomNumber() {
 
 function areDigitsRepeating(randomNum) {
     var num = randomNum.toString().split("");
-    console.log(num);
     let digitsRepeating = false;
     for (var i = 0; i < num.length; i++) {
         var num1 = num[i];
