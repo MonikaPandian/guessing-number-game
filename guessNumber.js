@@ -1,8 +1,7 @@
 var numberOfGuesses;
 let timer = true;
-var maxScore = [];
-var noOfGuesses = [];
 let person = "";
+var timeTaken;
 
 function startGame() {
     numberOfGuesses = 0;
@@ -95,8 +94,7 @@ function submitGuess() {
         + "\n * means digit does not exists");
 
     document.getElementById("No_of_guess").innerHTML = numberOfGuesses;
-    noOfGuesses.push(numberOfGuesses);
-    localStorage.setItem("numberofGuesses", noOfGuesses);
+    localStorage.setItem("numberofGuesses", numberOfGuesses);
     checkGameOver();
 }
 
@@ -110,24 +108,17 @@ function checkGameOver() {
             + document.getElementById('min').innerHTML + "min "
             + document.getElementById('sec').innerHTML + "sec "
             + document.getElementById('count').innerHTML + "ms");
-        var timeTaken = document.getElementById('hr').innerHTML + ":" + document.getElementById('min').innerHTML + ":" +
+        timeTaken = document.getElementById('hr').innerHTML + ":" + document.getElementById('min').innerHTML + ":" +
             document.getElementById('sec').innerHTML + ":" + document.getElementById('count').innerHTML;
-        maxScore.push(timeTaken);
-        localStorage.setItem('timings', maxScore);
-
-        let min = (arr) => {
-            let min = arr[0];
-
-            for (let i of arr) {
-                if (i < min) {
-                    min = i;
-                }
+        if (localStorage.getItem('topScore')) {
+            var bestScore = localStorage.getItem('topScore');
+            if (bestScore < timeTaken) {
+                timeTaken = bestScore;
             }
-            return min;
-        };
+        }
+        localStorage.setItem('topScore', timeTaken);
 
-        let minTiming = min(maxScore);
-        alert("New Top Score : " + minTiming + "  numberOfGuesses " + numberOfGuesses);
+        alert("New Top Score : " + timeTaken + '\n' + " Number of Guesses :" + numberOfGuesses);
         stopTimer();
         document.getElementById("No_of_guess").innerHTML = 0;
     }
